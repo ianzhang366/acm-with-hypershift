@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: ian-clusters
+spec: {}
+status: {}
+---
+apiVersion: v1
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJjbG91ZC5vcGVuc2hpZnQuY29tIjp7ImF1dGgiOiJiM0JsYm5Ob2FXWjBMWEpsYkdWaGMyVXRaR1YySzJsNmFHRnVaM0psWkdoaGRHTnZiVEZrY25wc2FqSTBhMjVvZDJZMmEyNWliV2N5WW5wbE1IZzJjem96VGtwQ1IwSXhWbG94Vms1Q1dWRktUVGxDTjB4SlVqVlFTVTR3UjFrM056VlJTakJTTWxWTVNFa3lVa2RYUkVFMlREVk1VRkkyVGtwSVF6Qk9PVkpKIiwiZW1haWwiOiJpemhhbmdAcmVkaGF0LmNvbSJ9LCJxdWF5LmlvIjp7ImF1dGgiOiJiM0JsYm5Ob2FXWjBMWEpsYkdWaGMyVXRaR1YySzJsNmFHRnVaM0psWkdoaGRHTnZiVEZrY25wc2FqSTBhMjVvZDJZMmEyNWliV2N5WW5wbE1IZzJjem96VGtwQ1IwSXhWbG94Vms1Q1dWRktUVGxDTjB4SlVqVlFTVTR3UjFrM056VlJTakJTTWxWTVNFa3lVa2RYUkVFMlREVk1VRkkyVGtwSVF6Qk9PVkpKIiwiZW1haWwiOiJpemhhbmdAcmVkaGF0LmNvbSJ9LCJyZWdpc3RyeS5jb25uZWN0LnJlZGhhdC5jb20iOnsiYXV0aCI6Ik5UTTBNakl4TXpSOGRXaGpMVEZrY2xwc1NqSTBhMDVJVjBZMlMwNWliVWN5UW5wRk1IZzJjenBsZVVwb1lrZGphVTlwU2xOVmVsVjRUV2xLT1M1bGVVcDZaRmRKYVU5cFNUTk9SRlUwVFcxRk1GbHRXbWxOUkUwd1drUkZOVTlYVm1sWmFsWnFXbGRGTkZscVNUUlBWR2Q0VFZOS09TNVFWRWhyWDJGR1lUWldZV2hLYUhZeFZqUjNURWxFVTNsMFNuSk1jSEJRYkZCUlZ6UXdiM0ptYVd4bGRFWkxjMVpuYm1SUU16TnNlQzB4VVhsMFVHNW9Obmd5VGtZMGNFdzVSbXAxYVc1clJYSmZXbFJZVm1wcFduVTRkWFpRYWt4VlFYaElNbkYzVURKR1psVkllbFZPUVd0MmFXRmZVa1JCTVc1MFRGQnNiR1ZGVFMwNGRsZDBaamxyU0Y5NmQzZHphamQ0WDBOaFpYSnlZVjlKYUdOYVRYTlVVRkZaZVUxa2VYaDVSM0ZHUVdGak5qUlJUbmR3YVhVMmIyWkRibFJsTFZFMk1FWnRSVXhYWkhGcGNGOHdNUzB6Y0haeE9VUnphVGx2UlVzelp5MXBiMk5hV0Vjd2VraHJMVEpQVm1zMWVXeFdVV3RxUjFWU1FtdG9ha0ZyUzBGUk1rTmFOVTk2UzFadVVrczFlREJwWDBKUlkxbFBRa2N6TW1WSVV6ZFpaM1ozZWtoNFJGRkdjMWhQU1hkeVlqWjRWa1EzTUdsSGVHRnJjVGh6YVZvek9HWjViM2QyU1dSV1duZHFOa016VVdwRGMxWnNTbVZpZWxWMVZrUnVTVEJYYWs1eWRWTlJTblYyUTNSRlNrZHVWQzFoYTFVNWFFaHVSVkF5TUUwd09XNUZTMncwVkRodlNHSkpNV3hMVEhnMVlrd3dZVnBuZUhWUWVIaDZjVzVtUWtoWGNVcHZjVkJsVUhsRFExRkxjV3RRYlhZMldEbHlNM2hxTjIxRUxXMW1kazFQUTNOZlJtUk9iVFpVVVZobFRqVjJUelpvY1d0WlpHMW9WMDVOTVZWYWFsZFdkSGhUWjE5WU5GWkdSMnA2YVdneU1tcE9NRFJJVFRKdFpsZEtTRTF0ZUhWcFN6SldNRXQ1UTNWV1ZXMWZaMDQyUnpOQ2VucFFNamhTYzJ0SldXWk5PVGhJUkhrMFJGZDZhR2s1UVdoaWVXcFZVREZTYVdwNVIwd3dOalZRYTFrdE4zQjVXRU5FVVRscWNsRTNjMWxxWmtRdGJFZ3pNWFIwU2s5UlNXSnJPRmhMY2tOTE5HRXpPVVpIU0VKS2JXcFlhRkY2ZERsTU1XTjBWWFEyYUUwelZGVkdOSEpUWTBGUWJsaFBVamRtVVd0YU0yazVTMEpvY0daSWRWUnVTRWRzVDNSeFVRPT0iLCJlbWFpbCI6Iml6aGFuZ0ByZWRoYXQuY29tIn0sInJlZ2lzdHJ5LnJlZGhhdC5pbyI6eyJhdXRoIjoiTlRNME1qSXhNelI4ZFdoakxURmtjbHBzU2pJMGEwNUlWMFkyUzA1aWJVY3lRbnBGTUhnMmN6cGxlVXBvWWtkamFVOXBTbE5WZWxWNFRXbEtPUzVsZVVwNlpGZEphVTlwU1ROT1JGVTBUVzFGTUZsdFdtbE5SRTB3V2tSRk5VOVhWbWxaYWxacVdsZEZORmxxU1RSUFZHZDRUVk5LT1M1UVZFaHJYMkZHWVRaV1lXaEthSFl4VmpSM1RFbEVVM2wwU25KTWNIQlFiRkJSVnpRd2IzSm1hV3hsZEVaTGMxWm5ibVJRTXpOc2VDMHhVWGwwVUc1b05uZ3lUa1kwY0V3NVJtcDFhVzVyUlhKZldsUllWbXBwV25VNGRYWlFha3hWUVhoSU1uRjNVREpHWmxWSWVsVk9RV3QyYVdGZlVrUkJNVzUwVEZCc2JHVkZUUzA0ZGxkMFpqbHJTRjk2ZDNkemFqZDRYME5oWlhKeVlWOUphR05hVFhOVVVGRlplVTFrZVhoNVIzRkdRV0ZqTmpSUlRuZHdhWFUyYjJaRGJsUmxMVkUyTUVadFJVeFhaSEZwY0Y4d01TMHpjSFp4T1VSemFUbHZSVXN6WnkxcGIyTmFXRWN3ZWtockxUSlBWbXMxZVd4V1VXdHFSMVZTUW10b2FrRnJTMEZSTWtOYU5VOTZTMVp1VWtzMWVEQnBYMEpSWTFsUFFrY3pNbVZJVXpkWlozWjNla2g0UkZGR2MxaFBTWGR5WWpaNFZrUTNNR2xIZUdGcmNUaHphVm96T0daNWIzZDJTV1JXV25kcU5rTXpVV3BEYzFac1NtVmllbFYxVmtSdVNUQlhhazV5ZFZOUlNuVjJRM1JGU2tkdVZDMWhhMVU1YUVodVJWQXlNRTB3T1c1RlMydzBWRGh2U0dKSk1XeExUSGcxWWt3d1lWcG5lSFZRZUhoNmNXNW1Ra2hYY1VwdmNWQmxVSGxEUTFGTGNXdFFiWFkyV0RseU0zaHFOMjFFTFcxbWRrMVBRM05mUm1ST2JUWlVVVmhsVGpWMlR6Wm9jV3RaWkcxb1YwNU5NVlZhYWxkV2RIaFRaMTlZTkZaR1IycDZhV2d5TW1wT01EUklUVEp0WmxkS1NFMXRlSFZwU3pKV01FdDVRM1ZXVlcxZlowNDJSek5DZW5wUU1qaFNjMnRKV1daTk9UaElSSGswUkZkNmFHazVRV2hpZVdwVlVERlNhV3A1UjB3d05qVlFhMWt0TjNCNVdFTkVVVGxxY2xFM2MxbHFaa1F0YkVnek1YUjBTazlSU1dKck9GaExja05MTkdFek9VWkhTRUpLYldwWWFGRjZkRGxNTVdOMFZYUTJhRTB6VkZWR05ISlRZMEZRYmxoUFVqZG1VV3RhTTJrNVMwSm9jR1pJZFZSdVNFZHNUM1J4VVE9PSIsImVtYWlsIjoiaXpoYW5nQHJlZGhhdC5jb20ifX19Cg==
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: hypershift-demo-pull-secret
+  namespace: ian-clusters
+---
+apiVersion: hypershift.openshift.io/v1alpha1
+kind: HostedCluster
+metadata:
+  creationTimestamp: null
+  name: hypershift-demo
+  namespace: ian-clusters
+spec:
+  autoscaling: {}
+  controllerAvailabilityPolicy: SingleReplica
+  dns:
+    baseDomain: example.com
+  etcd:
+    managed:
+      storage:
+        persistentVolume:
+          size: 4Gi
+        type: PersistentVolume
+    managementType: Managed
+  fips: false
+  infraID: hypershift-demo-s6rs4
+  issuerURL: ""
+  networking:
+    machineCIDR: ""
+    networkType: OpenShiftSDN
+    podCIDR: 10.132.0.0/14
+    serviceCIDR: 172.31.0.0/16
+  platform:
+    type: None
+  pullSecret:
+    name: hypershift-demo-pull-secret
+  release:
+    image: quay.io/openshift-release-dev/ocp-release:4.9.7-x86_64
+  services:
+  - service: APIServer
+    servicePublishingStrategy:
+      nodePort:
+        address: 10.0.130.228
+      type: NodePort
+  - service: OAuthServer
+    servicePublishingStrategy:
+      nodePort:
+        address: 10.0.130.228
+      type: NodePort
+  - service: OIDC
+    servicePublishingStrategy:
+      nodePort:
+        address: 10.0.130.228
+      type: None
+  - service: Konnectivity
+    servicePublishingStrategy:
+      nodePort:
+        address: 10.0.130.228
+      type: NodePort
+  - service: Ignition
+    servicePublishingStrategy:
+      nodePort:
+        address: 10.0.130.228
+      type: NodePort
+  sshKey:
+    name: hypershift-demo-ssh-key
+status:
+  conditions: null
+  ignitionEndpoint: ""
+---
+apiVersion: v1
+data:
+  id_rsa.pub: c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FDMEhMNjNncG9Dajk0M09zUDRsVVhTY2QwRXM0OHZtQkxqc1p0UTJyeGRDbXRkWE10NTZPVXlnOXhYdHNQUk05aEpxN3FNWmErdmJxYkhjRUlBN21jcFJWenNsdmdKVjlSKzJjaklScVIyaGZiTjVNcHVwNnM4aUxGUDYzL1RoYis0YUdENzAreDhDMHJGN1lOK01JWVE5L1BadUNWQ25FZmgwNlhmRVlnNldrQ1BOc0xrV3BJMHB6aGtER1hSeDliTU4ycnMzWFNwTjlWbnVBWWcvamJsQ3MxenF3bXRSbnZjMG9ST2pxM1lxSS9ISER1Vkh4TEI4WCt5NWhlcDJKUzVBL3F1Qm50TVhtOFJUMXRDcjBEZUUvWEdUeDVJOVh0OGNiWUlZd3NSUkVFVktySTh0dU5TcCtYYk13VnNEcnRjQUovbC9EcGFRNUxGOCtITU1UMmRscFN4SzEwZHVtUkl6TjFMYzBkdzBOMUlhUVBPNUtVVzQwajY5cHNzeDlxc2cra0JESkxGRnozQmU1S2w1STNoL1oyTEZKVm9WQTJBTzJ3QjljRWZGYVlOcVRRZTZPMHYwSkF4UHoreTBiZUR1dHdJbVFKcEJNSkphMm5SM0Rubjl0U2t1UXZwK1AzQk13UkN1QmNoZzNCMzdvd2dGUjhMZXBaSVNmaUpJQmM9IGlhbnpoYW5nQGl6aGFuZy1tYWMK
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: hypershift-demo-ssh-key
+  namespace: ian-clusters
+---
+apiVersion: hypershift.openshift.io/v1alpha1
+kind: NodePool
+metadata:
+  creationTimestamp: null
+  name: hypershift-demo
+  namespace: ian-clusters
+spec:
+  clusterName: hypershift-demo
+  nodeCount: 2
+  nodePoolManagement:
+    autoRepair: false
+    upgradeType: Replace
+  platform:
+    type: None
+  release:
+    image: quay.io/openshift-release-dev/ocp-release:4.9.7-x86_64
+status:
+  conditions: null
+  nodeCount: 0
+---

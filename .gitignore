@@ -1,0 +1,4 @@
+mgmt-kubeconfig
+hostKubeconfig
+auto-import-secret.yaml
+auto-import-crd.yaml
