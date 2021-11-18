@@ -44,6 +44,11 @@ addon_config="./addonconfig.yaml"
 
 function checkSetup() {
     pe "which hypershift"
+    if [ -z "$(which hypershift)" ]; then
+        echo "hypershift binary dones't exist, please install it follow: https://github.com/openshift/hypershift"
+        exit 1
+    fi
+
     pe "oc get po -n open-cluster-management"
     comment "Install hypershift operaotr to management cluster"
 }
@@ -171,10 +176,12 @@ function createHostAndImport() {
 function _usage() {
     echo -e ""
     echo -e "Usage: $0 [options]"
-    echo -e "\t$0 help you deploy a hosted cluster, then import the hosted cluster to your ACM hub,\n\tand provide helper functions to clean up and show some entry points"
+    echo -e "\t$0 help you deploy a hosted cluster, then import the hosted cluster to your ACM hub,\n\tand provide helper functions to clean up and show some entry points.\n\tYou should run $0 -i at least once before running other operator."
     echo -e ""
     echo -e "\t-c\tcreate hosted cluster(on AWS) and imported it to ACM hub"
     echo -e "\t-d\tdetach the hosted cluster from ACM hub and destroy the hosted cluster"
+    echo -e "\t-f\tforce reimport the hosted cluster to ACM"
+    echo -e "\t-i\tinstall hypershift operator to your management clouster(aka, the ACM hub's OCP)"
     echo -e "\t-r\trender will output the hypershift CRs to YAML file for you to inspect"
     echo -e "\t-s\tshow routes to hosted cluster's OCP console and your ACM hub"
     echo -e ""
@@ -182,7 +189,7 @@ function _usage() {
 
 }
 
-while getopts "cdrsh" opt; do
+while getopts "cdfirsh" opt; do
     case "${opt}" in
     c)
         createHostAndImport
@@ -194,6 +201,19 @@ while getopts "cdrsh" opt; do
 
         exit $?
         ;;
+    f)
+        unimportAsManagedCluster
+        importAsManagedCluster
+
+        exit $?
+        ;;
+    i)
+        checkSetup
+        installHypershiftOperator
+
+        exit $?
+        ;;
+
     r)
         renderHypershiftCreate
 
