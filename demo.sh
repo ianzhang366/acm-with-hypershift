@@ -17,18 +17,20 @@ function comment() {
 
 # comment "https://excalidraw.com/#json=uhI3fqeRHGiO5y91yiwlR,jwUQ5aBDQ0SJFzR8tjUSkg"
 
-oidc_bucket="izhang-hypershift-demo"
+oidc_bucket="izhang-hyper-v1"
 bucket_region="us-east-1"
 aws_cred_file="$HOME/.aws/credentials"
 
 pull_secret="../notes/pull-secret.txt"
-hostClusterNamespace="ian-clusters"
-hostClusterName="izhang-hypershift-demo"
-hyperConfig="./$hyperClusterName.kubeconfig"
-ssh_pub_key_path="../notes/id_rsa.pub"
+hostClusterNamespace="clusters"
+hostClusterName="mce-auto-import"
 
-hostKubeconfig="./hostKubeconfig"
-mgmt_kubeconfig="./mgmt-kubeconfig"
+ssh_pub_key_path="../notes/id_rsa.pub"
+infraID="izhang-hypershift-demo-zqjpd"
+hypershiftDestroyCMD="/Users/ianzhang/golang/src/hypershift/hypershift/bin/hypershift "
+
+hostKubeconfig="/tmp/hostKubeconfig"
+mgmt_kubeconfig="$HOME/golang/src/cluster-keeper-clc/dependencies/lifeguard/clusterclaims/izhang-hub/kubeconfig"
 
 export DEMO_MC_NAME="hypershift-demo-managed-cluster"
 hyershift_demo_MC="./managed-cluster.yaml"
@@ -41,6 +43,8 @@ HOST_OC="oc --kubeconfig $hostKubeconfig"
 MGMT_OC="oc --kubeconfig $mgmt_kubeconfig"
 
 addon_config="./addonconfig.yaml"
+
+BASE_DOMAIN="dev02.red-chesterfield.com"
 
 function checkSetup() {
     pe "which hypershift"
@@ -62,30 +66,28 @@ function installHypershiftOperator() {
     pe "oc get po -n hypershift"
 }
 
-function renderHypershiftCreate() {
+function hypershiftCreate() {
     local KUBECONFIG=$mgmt_kubeconfig
-    pe "hypershift create cluster none \
-        --pull-secret $pull_secret \
-        --name $hostClusterName \
-        --namespace $hostClusterNamespace \
-        --node-pool-replicas 2 \
-        --ssh-key $ssh_pub_key_path --render  > hypershift-create.yaml"
-}
-
-function createHostClusterOnAWS() {
-    local KUBECONFIG=$mgmt_kubeconfig
+    local render="$1"
     pe "hypershift create cluster aws \
         --pull-secret $pull_secret \
         --aws-creds $aws_cred_file \
         --name $hostClusterName \
         --namespace $hostClusterNamespace \
-        --base-domain dev10.red-chesterfield.com \
+        --base-domain $BASE_DOMAIN \
+        --infra-id $infraID \
         --instance-type m5.xlarge \
         --region $bucket_region \
         --node-pool-replicas 2 \
         --root-volume-size 30 \
         --root-volume-type gp2 \
-        --ssh-key $ssh_pub_key_path"
+        --ssh-key $ssh_pub_key_path $render"
+}
+
+function createHostClusterOnAWS() {
+    local KUBECONFIG=$mgmt_kubeconfig
+
+    hypershiftCreate
 
     pe "$MGMT_OC wait --timeout=300s --for=condition=IgnitionEndpointAvailable hostedcluster -n $hostClusterNamespace $hostClusterName"
 
@@ -95,49 +97,22 @@ function createHostClusterOnAWS() {
 
 function destroyHostClusterOnAWS() {
     local KUBECONFIG=$mgmt_kubeconfig
-    pe "hypershift destroy cluster aws \
+    pe "$hypershiftDestroyCMD destroy cluster aws \
         --aws-creds $aws_cred_file \
         --name $hostClusterName \
         --namespace $hostClusterNamespace \
-        --base-domain dev10.red-chesterfield.com \
-        --cluster-grace-period 600s \
+        --base-domain $BASE_DOMAIN \
+        --infra-id $infraID \
         --region $bucket_region"
 
     pe "$MGMT_OC get hostedcluster -A"
-}
-
-function waitFor() {
-    local kind=$1
-    local ns=$2
-    local name=$3
-    local kubeconfig=$4
-
-    matched=$(oc get $kind $name -n $ns --kubeconfig $kubeconfig --no-headers --ignore-not-found=true)
-
-    while [ -z "$matched" ]; do
-        matched=$(oc get $kind $name -n $ns --kubeconfig $kubeconfig --no-headers --ignore-not-found=true)
-        echo "Waiting for $kind ($ns/$name) to be created"
-        sleep 10
-    done
-}
-
-function waitforRouteStatus() {
-    local ns="$1"
-    local name="$2"
-    local cfg="$3"
-
-    valid=$(oc get route -n $ns $name --kubeconfig $cfg -ojsonpath="{.status.ingress[].host}")
-    echo "valid: " $valid
-    while [ -z "$valid" ]; do
-        valid=$(oc get route -n $ns $name --kubeconfig $cfg -ojsonpath="{.status.ingress[].host}")
-        sleep 10
-    done
 }
 
 function showHostOCP() {
     #comment "Get ACM route"
     printf "ACM URL:\n{https://%s}\n" $($MGMT_OC get route -n open-cluster-management multicloud-console -ojsonpath='{.status.ingress[].host}')
 
+    pe "$MGMT_OC get secret -n $hostClusterNamespace ${hostClusterName}-admin-kubeconfig -ogo-template='{{.data.kubeconfig | base64decode}}' > $hostKubeconfig"
     waitFor "route" openshift-console console $hostKubeconfig
     waitforRouteStatus openshift-console console $hostKubeconfig
     printf "Guest cluster OCP console URL:\n{https://%s}\n" $($HOST_OC get route -n openshift-console console -ojsonpath='{.status.ingress[].host}')
@@ -164,13 +139,13 @@ function unimportAsManagedCluster() {
 }
 
 function cleanUpAll() {
-    unimportAsManagedCluster
+    # unimportAsManagedCluster
     destroyHostClusterOnAWS
 }
 
 function createHostAndImport() {
     createHostClusterOnAWS
-    importAsManagedCluster
+    # importAsManagedCluster
 }
 
 function _usage() {
@@ -208,14 +183,14 @@ while getopts "cdfirsh" opt; do
         exit $?
         ;;
     i)
-        checkSetup
+        # checkSetup
         installHypershiftOperator
 
         exit $?
         ;;
 
     r)
-        renderHypershiftCreate
+        hypershiftCreate "--render  > hypershift-create.yaml"
 
         exit $?
         ;;

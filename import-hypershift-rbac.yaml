@@ -1,0 +1,52 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: open-cluster-management:managedcluster-import-controller-v2:hypershift
+  namespace: open-cluster-management
+rules:
+  - apiGroups:
+      - hypershift.openshift.io
+    resources:
+      - hostedclusters
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - agent.open-cluster-management.io
+    resources:
+    - klusterletaddonconfigs
+    verbs:
+    - create
+    - delete
+    - get
+  - apiGroups:
+    - cluster.open-cluster-management.io
+    resources:
+      - managedclustersets/join
+    verbs:
+      - create
+  - apiGroups:
+     - register.open-cluster-management.io
+    resources:
+      - managedclusters/accept
+    verbs:
+      - update
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: managedcluster-import-controller-hypershift
+subjects:
+  - kind: ServiceAccount
+    name: managedcluster-import-controller-v2
+    namespace: open-cluster-management
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: 'open-cluster-management:managedcluster-import-controller-v2:hypershift'

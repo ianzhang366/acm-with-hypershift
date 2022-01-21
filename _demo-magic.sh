@@ -236,3 +236,31 @@ check_pv
 #        ;;
 #    esac
 #done
+
+function waitFor() {
+    local kind=$1
+    local ns=$2
+    local name=$3
+    local kubeconfig=$4
+
+    matched=$(oc get $kind $name -n $ns --kubeconfig $kubeconfig --no-headers --ignore-not-found=true)
+
+    while [ -z "$matched" ]; do
+        matched=$(oc get $kind $name -n $ns --kubeconfig $kubeconfig --no-headers --ignore-not-found=true)
+        echo "Waiting for $kind ($ns/$name) to be created"
+        sleep 10
+    done
+}
+
+function waitforRouteStatus() {
+    local ns="$1"
+    local name="$2"
+    local cfg="$3"
+
+    valid=$(oc get route -n $ns $name --kubeconfig $cfg -ojsonpath="{.status.ingress[].host}")
+
+    while [ -z "$valid" ]; do
+        valid=$(oc get route -n $ns $name --kubeconfig $cfg -ojsonpath="{.status.ingress[].host}")
+        sleep 10
+    done
+}
