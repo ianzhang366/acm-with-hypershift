@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   creationTimestamp: null
-  name: ian-clusters
+  name: clusters
 spec: {}
 status: {}
 ---
@@ -12,20 +12,22 @@ data:
 kind: Secret
 metadata:
   creationTimestamp: null
-  name: hypershift-demo-pull-secret
-  namespace: ian-clusters
+  name: mce-auto-import-pull-secret
+  namespace: clusters
 ---
 apiVersion: hypershift.openshift.io/v1alpha1
 kind: HostedCluster
 metadata:
   creationTimestamp: null
-  name: hypershift-demo
-  namespace: ian-clusters
+  name: mce-auto-import
+  namespace: clusters
 spec:
   autoscaling: {}
   controllerAvailabilityPolicy: SingleReplica
   dns:
-    baseDomain: example.com
+    baseDomain: dev02.red-chesterfield.com
+    privateZoneID: Z091381936WPOOI0EX513
+    publicZoneID: Z353L7N3UKR0RN
   etcd:
     managed:
       storage:
@@ -34,50 +36,90 @@ spec:
         type: PersistentVolume
     managementType: Managed
   fips: false
-  infraID: hypershift-demo-s6rs4
-  issuerURL: ""
+  infraID: izhang-hypershift-demo-zqjpd
+  issuerURL: https://izhang-hyper-dev02.s3.us-east-1.amazonaws.com/izhang-hypershift-demo-zqjpd
   networking:
-    machineCIDR: ""
+    machineCIDR: 10.0.0.0/16
     networkType: OpenShiftSDN
     podCIDR: 10.132.0.0/14
     serviceCIDR: 172.31.0.0/16
   platform:
-    type: None
+    aws:
+      cloudProviderConfig:
+        subnet:
+          id: subnet-0623e03c99538afde
+        vpc: vpc-04987eee6707256e6
+        zone: us-east-1a
+      controlPlaneOperatorCreds:
+        name: mce-auto-import-cpo-creds
+      kubeCloudControllerCreds:
+        name: mce-auto-import-cloud-ctrl-creds
+      nodePoolManagementCreds:
+        name: mce-auto-import-node-mgmt-creds
+      region: us-east-1
+      roles:
+      - arn: arn:aws:iam::272982271371:role/izhang-hypershift-demo-zqjpd-openshift-ingress
+        name: cloud-credentials
+        namespace: openshift-ingress-operator
+      - arn: arn:aws:iam::272982271371:role/izhang-hypershift-demo-zqjpd-openshift-image-registry
+        name: installer-cloud-credentials
+        namespace: openshift-image-registry
+      - arn: arn:aws:iam::272982271371:role/izhang-hypershift-demo-zqjpd-aws-ebs-csi-driver-operator
+        name: ebs-cloud-credentials
+        namespace: openshift-cluster-csi-drivers
+    type: AWS
   pullSecret:
-    name: hypershift-demo-pull-secret
+    name: mce-auto-import-pull-secret
   release:
-    image: quay.io/openshift-release-dev/ocp-release:4.9.7-x86_64
+    image: quay.io/openshift-release-dev/ocp-release:4.10.0-fc.2-x86_64
   services:
   - service: APIServer
     servicePublishingStrategy:
-      nodePort:
-        address: 10.0.130.228
-      type: NodePort
+      type: LoadBalancer
   - service: OAuthServer
     servicePublishingStrategy:
-      nodePort:
-        address: 10.0.130.228
-      type: NodePort
+      type: Route
   - service: OIDC
     servicePublishingStrategy:
-      nodePort:
-        address: 10.0.130.228
-      type: None
+      type: S3
   - service: Konnectivity
     servicePublishingStrategy:
-      nodePort:
-        address: 10.0.130.228
-      type: NodePort
+      type: Route
   - service: Ignition
     servicePublishingStrategy:
-      nodePort:
-        address: 10.0.130.228
-      type: NodePort
+      type: Route
   sshKey:
-    name: hypershift-demo-ssh-key
+    name: mce-auto-import-ssh-key
 status:
   conditions: null
   ignitionEndpoint: ""
+---
+apiVersion: v1
+data:
+  credentials: W2RlZmF1bHRdCnJvbGVfYXJuID0gYXJuOmF3czppYW06OjI3Mjk4MjI3MTM3MTpyb2xlL2l6aGFuZy1oeXBlcnNoaWZ0LWRlbW8tenFqcGQtY2xvdWQtY29udHJvbGxlcgp3ZWJfaWRlbnRpdHlfdG9rZW5fZmlsZSA9IC92YXIvcnVuL3NlY3JldHMvb3BlbnNoaWZ0L3NlcnZpY2VhY2NvdW50L3Rva2VuCg==
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: mce-auto-import-cloud-ctrl-creds
+  namespace: clusters
+---
+apiVersion: v1
+data:
+  credentials: W2RlZmF1bHRdCnJvbGVfYXJuID0gYXJuOmF3czppYW06OjI3Mjk4MjI3MTM3MTpyb2xlL2l6aGFuZy1oeXBlcnNoaWZ0LWRlbW8tenFqcGQtbm9kZS1wb29sCndlYl9pZGVudGl0eV90b2tlbl9maWxlID0gL3Zhci9ydW4vc2VjcmV0cy9vcGVuc2hpZnQvc2VydmljZWFjY291bnQvdG9rZW4K
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: mce-auto-import-node-mgmt-creds
+  namespace: clusters
+---
+apiVersion: v1
+data:
+  credentials: W2RlZmF1bHRdCnJvbGVfYXJuID0gYXJuOmF3czppYW06OjI3Mjk4MjI3MTM3MTpyb2xlL2l6aGFuZy1oeXBlcnNoaWZ0LWRlbW8tenFqcGQtY29udHJvbC1wbGFuZS1vcGVyYXRvcgp3ZWJfaWRlbnRpdHlfdG9rZW5fZmlsZSA9IC92YXIvcnVuL3NlY3JldHMvb3BlbnNoaWZ0L3NlcnZpY2VhY2NvdW50L3Rva2VuCg==
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: mce-auto-import-cpo-creds
+  namespace: clusters
 ---
 apiVersion: v1
 data:
@@ -85,25 +127,35 @@ data:
 kind: Secret
 metadata:
   creationTimestamp: null
-  name: hypershift-demo-ssh-key
-  namespace: ian-clusters
+  name: mce-auto-import-ssh-key
+  namespace: clusters
 ---
 apiVersion: hypershift.openshift.io/v1alpha1
 kind: NodePool
 metadata:
   creationTimestamp: null
-  name: hypershift-demo
-  namespace: ian-clusters
+  name: mce-auto-import
+  namespace: clusters
 spec:
-  clusterName: hypershift-demo
-  nodeCount: 2
-  nodePoolManagement:
+  clusterName: mce-auto-import
+  management:
     autoRepair: false
     upgradeType: Replace
+  nodeCount: 2
   platform:
-    type: None
+    aws:
+      instanceProfile: izhang-hypershift-demo-zqjpd-worker
+      instanceType: m5.xlarge
+      rootVolume:
+        size: 30
+        type: gp2
+      securityGroups:
+      - id: sg-02cdc867741f36006
+      subnet:
+        id: subnet-0623e03c99538afde
+    type: AWS
   release:
-    image: quay.io/openshift-release-dev/ocp-release:4.9.7-x86_64
+    image: quay.io/openshift-release-dev/ocp-release:4.10.0-fc.2-x86_64
 status:
   conditions: null
   nodeCount: 0
