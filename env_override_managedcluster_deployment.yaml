@@ -1,0 +1,108 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: managedcluster-import-controller-v2
+  namespace: open-cluster-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: managedcluster-import-controller-v2
+      component: managedcluster-import-controller
+  template:
+    spec:
+      containers:
+        - name: managedcluster-import-controller
+          image: ${managedClusterOperatorImg}
+          env:
+            - name: WATCH_NAMESPACE
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: MAX_CONCURRENT_RECONCILES
+              value: '10'
+            - name: OPERATOR_NAME
+              value: managedcluster-import-controller
+            - name: DEFAULT_IMAGE_PULL_SECRET
+              value: multiclusterhub-operator-pull-secret
+            - name: DEFAULT_IMAGE_REGISTRY
+              value: quay.io/open-cluster-management
+            - name: REGISTRATION_OPERATOR_IMAGE
+              value: ${registrationOperatorImg}
+            - name: REGISTRATION_IMAGE
+              value: ${registrationImg}
+            - name: WORK_IMAGE
+              value: ${workImg}
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+          resources:
+            limits:
+              cpu: 500m
+              memory: 2Gi
+            requests:
+              cpu: 50m
+              memory: 96Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      dnsPolicy: ClusterFirst
+      serviceAccountName: managedcluster-import-controller-v2
+      serviceAccount: managedcluster-import-controller-v2
+      securityContext:
+        runAsNonRoot: true
+      imagePullSecrets:
+        - name: multiclusterhub-operator-pull-secret
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: beta.kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+                      - ppc64le
+                      - s390x
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 70
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: ocm-antiaffinity-selector
+                      operator: In
+                      values:
+                        - managedclusterimport
+                topologyKey: topology.kubernetes.io/zone
+            - weight: 35
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: ocm-antiaffinity-selector
+                      operator: In
+                      values:
+                        - managedclusterimport
+                topologyKey: kubernetes.io/hostname
+      schedulerName: default-scheduler
+      tolerations:
+        - key: dedicated
+          operator: Exists
+          effect: NoSchedule
+        - key: node-role.kubernetes.io/infra
+          operator: Exists
+          effect: NoSchedule

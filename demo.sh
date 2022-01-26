@@ -17,7 +17,7 @@ function comment() {
 
 # comment "https://excalidraw.com/#json=uhI3fqeRHGiO5y91yiwlR,jwUQ5aBDQ0SJFzR8tjUSkg"
 
-oidc_bucket="izhang-hyper-v1"
+oidc_bucket="izhang-hyper-dev02"
 bucket_region="us-east-1"
 aws_cred_file="$HOME/.aws/credentials"
 
@@ -30,7 +30,7 @@ infraID="izhang-hypershift-demo-zqjpd"
 hypershiftDestroyCMD="/Users/ianzhang/golang/src/hypershift/hypershift/bin/hypershift "
 
 hostKubeconfig="/tmp/hostKubeconfig"
-mgmt_kubeconfig="$HOME/golang/src/cluster-keeper-clc/dependencies/lifeguard/clusterclaims/izhang-hub/kubeconfig"
+mgmt_kubeconfig="$HOME/golang/src/cluster-keeper-clc/dependencies/lifeguard/clusterclaims/izhang-hd/kubeconfig"
 
 export DEMO_MC_NAME="hypershift-demo-managed-cluster"
 hyershift_demo_MC="./managed-cluster.yaml"
